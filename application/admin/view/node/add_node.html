@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>DouPHP 管理中心 - 添加分类 </title>
+<meta name="Copyright" content="Douco Design." />
+ {load href="/static/admin/css/public.css" /}
+ {load href="/static/admin/js/global.js" /}
+ {load href="/static/admin/js/jquery.min.js" /}
+ <script>
+
+ </script>
+</head>
+<body>
+<div id="dcWrap">
+ {include file="public:header" /}
+<!-- dcHead 结束 -->
+ {block name="include"}{include file="public:left" /}{/block}
+ <div id="dcMain">
+   <!-- 当前位置 -->
+<div id="urHere">DouPHP 管理中心<b>></b><strong>添加权限</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
+            <h3><a href="{:url('node/show')}" class="actionBtn">权限列表</a>权限列表</h3>
+    <form action="{:url('add_node')}" method="post">
+     <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+      <tr>
+       <td width="80" align="right">权限名称</td>
+       <td>
+        <input type="text" name="node_name" value="" size="40" class="inpMain" />
+       </td>
+      </tr>
+      <tr>
+       <td align="right">控制器</td>
+       <td>
+        <input type="text" name="node_controller" value="" size="40" class="inpMain" />
+       </td>
+      </tr>
+      <tr>
+       <td align="right">上级权限</td>
+       <td>
+        <select name="node_pid">
+         <option value="0">顶级权限</option>
+         {foreach $data as $key=>$vo }
+         <option value="{$vo.node_id}">{:str_repeat("　",$vo.level)}{$vo.node_name}</option>
+         {/foreach}
+         </select>
+       </td>
+      </tr>
+      <tr>
+       <td align="right">权限方法</td>
+       <td>
+        <input type="text" name="node_action" value="" size="40" class="inpMain" />
+       </td>
+      </tr>
+      <tr>
+       <td align="right">权限URL</td>
+       <td>
+        <input type="text" name="node_url" value="" size="40" class="inpMain" />
+       </td>
+      </tr>
+      <tr>
+       <td align="right">是否展示</td>
+       <td>
+        <input type="radio" name="node_left" value="1">展示
+        <input type="radio" name="node_left" value="0">不展示
+       </td>
+      </tr>
+      <tr>
+       <td></td>
+       <td>
+        <!--<input type="hidden" name="token" value="b9439ae8" />-->
+        <!--<input type="hidden" name="cat_id" value="" />-->
+        <input name="" class="btn" type="submit" value="提交" />
+       </td>
+      </tr>
+     </table>
+    </form>
+       </div>
+ </div>
+ <div class="clear"></div>
+<div id="dcFooter">
+ <div id="footer">
+  <div class="line"></div>
+  <ul>
+   版权所有 © 2013-2015 漳州豆壳网络科技有限公司，并保留所有权利。
+  </ul>
+ </div>
+</div><!-- dcFooter 结束 -->
+<div class="clear"></div> </div>
+</body>
+</html>

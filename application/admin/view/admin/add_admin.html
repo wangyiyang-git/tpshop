@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>DouPHP 管理中心 - 添加分类 </title>
+<meta name="Copyright" content="Douco Design." />
+ {load href="/static/admin/css/public.css" /}
+ {load href="/static/admin/js/global.js" /}
+ {load href="/static/admin/js/jquery.min.js" /}
+ <script>
+  $(function(){
+    var validate={
+     checkName:false,
+     checkEmail:false,
+     checkPassword:false,
+     checkPwd:false,
+     checkRepwd:false
+    };
+     //判断用户名不能为空
+    $("input[name='admin_name']").blur(function(){
+     var admin_name=$(this).val().trim();
+     if(admin_name==""){
+      $(this).next().remove();
+      $(this).after("<span>用户名不能为空</span>");
+      validate.checkName=false;
+      return false;
+     }
+     validate.checkName=true;
+     return true;
+     //发ajax验证唯一性
+
+    });
+    //判断邮箱不能为空
+   $("input[name='admin_email']").blur(function(){
+    var admin_email=$(this).val().trim();
+    if(admin_email==""){
+     $(this).next().remove();
+     $(this).after("<span>用户邮箱不能为空</span>");
+     validate.checkEmail=false;
+     return false;
+    }
+    validate.checkEmail=true;
+    return true;
+   });
+
+   //判断密码不能为空
+   $("input[name='admin_password']").blur(function(){
+    var admin_password=$(this).val().trim();
+    if(admin_password==""){
+     $(this).next().remove();
+     $(this).after("<span>用户密码不能为空</span>");
+     validate.checkPassword=false;
+     return false;
+    }
+    if(!/^\w{6,20}$/.test(admin_password)){
+     $(this).next().remove();
+     $(this).after("<span>6-20个字符:字母、数字或下划线 _</span>");
+     validate.checkPassword=false;
+     return false;
+    }
+    validate.checkPassword=true;
+    return true;
+   });
+
+   //判断确认密码不能为空
+   $("input[name='admin_pwd']").blur(function(){
+    var admin_pwd=$(this).val().trim();
+    var admin_password=$("input[name='admin_password']").val().trim();
+    if(admin_pwd==""){
+     $(this).next().remove();
+     $(this).after("<span>用户确认密码不能为空</span>");
+     validate.checkPwd=false;
+     return false;
+    }
+    if(!/^\w{6,20}$/.test(admin_pwd)){
+     $(this).next().remove();
+     $(this).after("<span>6-20个字符:字母、数字或下划线 _</span>");
+     validate.checkPwd=false;
+     return false;
+    }
+    if(admin_password!=admin_pwd) {
+     $(this).next().remove();
+     $(this).after("<span>确认密码和密码不一致</span>");
+     validate.checkRepwd = false;
+     return false;
+    }
+    validate.checkRepwd = true;
+    validate.checkPwd=true;
+    return true;
+   });
+   //发ajax表单提交
+   $("span[name='admin']").click(function(){
+       //取值
+    var admin_name=$("input[name='admin_name']").val().trim();
+    var admin_email=$("input[name='admin_email']").val().trim();
+    var admin_pwd=$("input[name='admin_pwd']").val().trim();
+    var role_id=$(".role_id").prop("value");
+      //发ajax
+    $.ajax({
+     url:"{:url('admin/add_admin')}",
+     type:"post",
+     data:{
+      admin_name:admin_name,
+      admin_email:admin_email,
+      admin_pwd:admin_pwd,
+      role_id:role_id
+     },
+     dataType:"json",
+     success:function(data){
+      if(data.status==1){
+        window.location.href="{:url('admin/show')}"
+      }
+     }
+    });
+    //验证
+    $("span[name='admin']").click(function(){
+     $("input[name='admin_name']").trigger("blur");
+     $("input[name='admin_pwd']").trigger("blur");
+     $("input[name='admin_repwd']").trigger("blur");
+     $("input[name='admin_email']").trigger("blur");
+     return validate.checkName&&validate.checkPwd&&validate.checkRepwd&&validate.checkEmail;
+    });
+   });
+  });
+ </script>
+</head>
+<body>
+<div id="dcWrap">
+ {include file="public:header" /}
+<!-- dcHead 结束 -->
+ {block name="include"}{include file="public:left" /}{/block}
+ <div id="dcMain">
+   <!-- 当前位置 -->
+<div id="urHere">DouPHP 管理中心<b>></b><strong>网站管理员</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
+            <h3><a href="{:url('admin/show')}" class="actionBtn">管理员列表</a>管理员列表</h3>
+    <form  name="admin" method="post">
+     <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+      <tr>
+       <td width="80" align="right">管理员名称</td>
+       <td>
+        <input type="text" name="admin_name" value="" size="40" class="inpMain" />
+       </td>
+      </tr>
+      <tr>
+       <td align="right">管理员E-mail</td>
+       <td>
+        <input type="text" name="admin_email" value="" size="40" class="inpMain" />
+       </td>
+      </tr>
+      <tr>
+       <td align="right">密码</td>
+       <td>
+        <input type="password" name="admin_password" value="" size="40" class="inpMain" />
+       </td>
+      </tr>
+      <tr>
+       <td align="right">确认密码</td>
+       <td>
+        <input type="password" name="admin_pwd" value="" size="40" class="inpMain" />
+       </td>
+      </tr>
+      <tr>
+       <td align="right">角色分类</td>
+       <td>
+        <select >
+         <option value="0">请选择...</option>
+         {foreach $data as $key=>$vo }
+         <option class="role_id" value="{$vo.role_id}">{$vo.role_name}</option>
+         {/foreach}
+        </select>
+       </td>
+      </tr>
+      <tr>
+       <td></td>
+       <td>
+        <!--<input type="hidden" name="token" value="b9439ae8" />-->
+        <!--<input type="hidden" name="cat_id" value="" />-->
+        <span name="admin" class="btn" type="button" value="提交" />提交</span>
+       </td>
+      </tr>
+     </table>
+    </form>
+       </div>
+ </div>
+ <div class="clear"></div>
+<div id="dcFooter">
+ <div id="footer">
+  <div class="line"></div>
+  <ul>
+   版权所有 © 2013-2015 漳州豆壳网络科技有限公司，并保留所有权利。
+  </ul>
+ </div>
+</div><!-- dcFooter 结束 -->
+<div class="clear"></div> </div>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>DouPHP 管理中心 - 添加分类 </title>
+<meta name="Copyright" content="Douco Design." />
+ {load href="/static/admin/css/public.css" /}
+ {load href="/static/admin/js/global.js" /}
+ {load href="/static/admin/js/jquery.min.js" /}
+ <script>
+     $(function(){
+      //验证
+        $(function(){
+         var validate={
+          checkName:false,
+          checkAlias:false,
+          checkKw:false,
+          checkDes:false,
+          checkOrder:false
+         };
+         //判断用户名不能为空
+         $("input[name='cate_name']").blur(function(){
+          var cate_name = $(this).val().trim();
+          if (cate_name == "") {
+           $(this).next().remove();
+           $(this).after("<span>分类名称不能为空</span>");
+           validate.checkName = false;
+           return false;
+          }
+          validate.checkName = true;
+          return true;
+         });
+         //验证
+         $("input[name='cate_alias']").blur(function(){
+          var cate_alias = $(this).val().trim();
+          if (cate_alias == "") {
+           $(this).next().remove();
+           $(this).after("<span>分类别名不能为空</span>");
+           validate.checkAlias = false;
+           return false;
+          }
+          validate.checkAlias = true;
+          return true;
+         });
+         //验证
+         $("input[name='cate_kw']").blur(function(){
+          var cate_kw = $(this).val().trim();
+          if (cate_kw == "") {
+           $(this).next().remove();
+           $(this).after("<span>分类关键字不能为空</span>");
+           validate.checkKw = false;
+           return false;
+          }
+          validate.checkKw = true;
+          return true;
+         });
+         $("input[name='cate_des']").blur(function(){
+          var cate_des = $(this).val().trim();
+          if (cate_des == "") {
+           $(this).next().remove();
+           $(this).after("<span>分类描述不能为空</span>");
+           validate.checkDes = false;
+           return false;
+          }
+          validate.checkDes = true;
+          return true;
+         });
+        //验证
+         $("input[name='cate_order']").blur(function(){
+          var cate_order = $(this).val().trim();
+          if (cate_order == "") {
+           $(this).next().remove();
+           $(this).after("<span>分类排序不能为空</span>");
+           validate.checkOrder = false;
+           return false;
+          }
+          validate.checkOrder = true;
+          return true;
+         });
+         //发ajax表单提交
+         $(".btn").click(function(){
+          //取值
+          var admin_name=$("input[name='cate_name']").val().trim();
+          var cate_alias=$("input[name='cate_alias']").val().trim();
+          var cate_kw=$("input[name='cate_kw']").val().trim();
+          var cate_des=$("textarea[name='cate_des']").val().trim();
+          var role_id=$(".role_id").prop("value");
+          //发ajax
+          $.ajax({
+           url:"{:url('admin/add_admin')}",
+           type:"post",
+           data:{
+            admin_name:admin_name,
+            admin_email:admin_email,
+            admin_pwd:admin_pwd,
+            role_id:role_id
+           },
+           dataType:"json",
+           success:function(data){
+            if(data.status==1){
+             window.location.href="{:url('admin/show')}"
+            }
+           }
+          });
+          //验证
+          $(".btn").click(function(){
+           $("input[name='admin_name']").trigger("blur");
+           $("input[name='admin_pwd']").trigger("blur");
+           $("input[name='admin_repwd']").trigger("blur");
+           $("input[name='admin_email']").trigger("blur");
+           return validate.checkName&&validate.checkPwd&&validate.checkRepwd&&validate.checkEmail;
+          });
+         });
+
+    });
+});
+
+ </script>
+</head>
+<body>
+<div id="dcWrap">
+ {include file="public:header" /}
+<!-- dcHead 结束 -->
+ {block name="include"}{include file="public:left" /}{/block}
+ <div id="dcMain">
+   <!-- 当前位置 -->
+<div id="urHere">DouPHP 管理中心<b>></b><strong>添加分类</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
+            <h3><a href="{:url('Productcategory/productCategory')}" class="actionBtn">商品分类</a>添加分类</h3>
+    <form action="" method="post">
+     <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
+      <tr>
+       <td width="80" align="right">分类名称</td>
+       <td>
+        <input type="text" name="cate_name" value="" size="40" class="inpMain" />
+       </td>
+      </tr>
+      <tr>
+       <td align="right">别名</td>
+       <td>
+        <input type="text" name="cate_alias" value="" size="40" class="inpMain" />
+       </td>
+      </tr>
+      <tr>
+       <td align="right">上级分类</td>
+       <td>
+        <select name="cate_pid">
+         <option value="0">顶级分类</option>
+         {foreach $data as $key=>$vo }
+         <option class="cate_id" value="{$vo.cate_id}">{:str_repeat("　",$vo.level)}{$vo.cate_name}</option>
+         {/foreach}
+         </select>
+       </td>
+      </tr>
+      <tr>
+       <td align="right">关键字</td>
+       <td>
+        <input type="text" name="cate_kw" value="" size="40" class="inpMain" />
+       </td>
+      </tr>
+      <tr>
+       <td align="right">简单描述</td>
+       <td>
+        <textarea name="cate_des" cols="60" rows="4" class="textArea"></textarea>
+       </td>
+      </tr>
+      <tr>
+       <td align="right">排序</td>
+       <td>
+        <input type="text" name="cate_order" value="" size="5" class="inpMain" />
+       </td>
+      </tr>
+      <tr>
+       <td></td>
+       <td>
+        <!--<input type="hidden" name="token" value="b9439ae8" />-->
+        <!--<input type="hidden" name="cat_id" value="" />-->
+        <input name="" class="btn" type="submit" value="提交" />
+       </td>
+      </tr>
+     </table>
+    </form>
+       </div>
+ </div>
+ <div class="clear"></div>
+<div id="dcFooter">
+ <div id="footer">
+  <div class="line"></div>
+  <ul>
+   版权所有 © 2013-2015 漳州豆壳网络科技有限公司，并保留所有权利。
+  </ul>
+ </div>
+</div><!-- dcFooter 结束 -->
+<div class="clear"></div> </div>
+</body>
+</html>
