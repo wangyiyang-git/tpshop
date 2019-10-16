@@ -25,8 +25,12 @@ class Common extends Controller{
             }
         }
         $adminService=new AdminService();
-        $menu=$adminService->getMenu();
-        $menu=$adminService->getMenuTree($menu);
+        $node=$adminService->getNodeAdminId(Session::get("admin")["admin_id"]);
+        $menu=$adminService->getleft();
+        //dump($menu);
+        $menu=$adminService->getleftTree($menu);
+       // dump($menu);
+//        exit;
         View::share("menu",$menu);
     }
     //false 没有权限，true 有权限
@@ -45,7 +49,7 @@ class Common extends Controller{
             return true;
         }
         //获取当前登录用户拥有的权限并进行判断
-        $mynode=(new AdminService())->getNodeByAdminId(Session::get("admin")["admin_id"]);
+        $mynode=(new AdminService())->getNodeAdminId(Session::get("admin")["admin_id"]);
         if(in_array($Route,$mynode)){
             return true;
         }else{

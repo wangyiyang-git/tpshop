@@ -4,7 +4,7 @@ namespace app\admin\controller;
 use think\Controller;
 use think\Db;
 use think\Request;
-class Node extends Controller
+class Node extends Common
 {
 
     public function show()

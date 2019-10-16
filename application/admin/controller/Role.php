@@ -5,21 +5,14 @@ namespace app\admin\controller;
 use think\Controller;
 use think\Db;
 use think\Request;
-class Role extends Controller
+class Role extends Common
 {
 
     public function show()
     {
         if(request()->isGet()){
-            $data=\app\admin\model\Role::getRole();
-            foreach($data as $k=>$v){
-                $data[$k]['node_id']=explode(",",$v["node_id"]);
-            }
-            foreach($data as $ke=>$val){
-                foreach($val["node_id"] as $key=>$vo){
-                    $data[$ke]['node_name'][]=Db::name("node")->where(["node_id"=>$vo])->field("node_name")->select();
-                }
-            }
+           $role=new \app\admin\model\Role();
+            $data=$role->all();
 
         }
         return view("show",["data"=>$data]);
@@ -41,7 +34,6 @@ class Role extends Controller
         }
 
     }
-
 
     public function save(Request $request)
     {

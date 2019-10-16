@@ -52,11 +52,11 @@
                 <td align="center">{$val.admin_id}</td>
                 <td>{$val.admin_name}</td>
                 <td align="left">
-                    {foreach $val["role_id"] as $k=>$v}
+                    {foreach $val->role as $k=>$v}
                     {$v->role_name}
                     {/foreach}
                 </td>
-                <td align="left">
+                <td align="center">
                     {foreach $val->role as $k=>$v}
                     {foreach $v->node as $k1=>$v1}
                     {$v1->node_name},

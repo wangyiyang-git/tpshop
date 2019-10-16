@@ -8,7 +8,7 @@
 namespace app\admin\controller;
 use think\Controller;
 
-class Product extends Controller{
+class Product extends Common{
     public function Product(){
         return view();
     }

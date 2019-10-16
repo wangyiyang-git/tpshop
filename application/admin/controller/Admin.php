@@ -13,12 +13,13 @@ class Admin extends Common
        if(request()->isGet()){
            $admin=new \app\admin\model\Admin();
            $data=$admin->all();
-           foreach($data as $kal=>$val){
-               foreach($val->role as $k=>$v){
-                   dump($v->node);
-               }
-           }
-           exit;
+//           dump($data);
+//           foreach($data as $kal=>$val){
+//
+//                   dump($val->role);
+//
+//           }
+//           exit;
            return view("show",["admin"=>$data]);
        }
     }

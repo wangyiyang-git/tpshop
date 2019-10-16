@@ -35,7 +35,7 @@
             <td>{$v.role_name}</td>
             <td align="center">{$v.role_content}</td>
             <td>
-            {foreach $v["node_name"] as $ke=>$vo }
+            {foreach $v->node as $ke=>$vo }
             {foreach $vo as $key=>$vol}
             {$vol.node_name}
             {/foreach}
