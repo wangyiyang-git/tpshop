@@ -18,17 +18,16 @@
      data:formData,
      contentType:false,
      processData:false,
-     dataType:"json"
-//     success:function(data){
-//      $("input[name='user_face']").val();
-//      if(data.status==1){
-//       //上传成功添加数据库
-//       $("#preview").attr("src",data.path);
-//      }else{
-//       //上传失败
-//       alert("上传失败");
-//      }
-//     }
+     dataType:"json",
+     success:function(data){
+      if(data.status==1){
+       //上传成功添加数据库
+       $(location).attr("href","{:url('brand/brand')}");
+      }else{
+       //上传失败
+       alert("上传失败");
+      }
+     }
     });
    });
   });
@@ -43,7 +42,7 @@
    <!-- 当前位置 -->
 <div id="urHere">DouPHP 管理中心<b>></b><strong>添加分类</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
             <h3><a href="{:url('brand/add_brand')}" class="actionBtn">商品分类</a>添加分类</h3>
-    <form action="{:url('add_brand')}" method="post" name="brand">
+    <form method="post" name="brand">
      <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
       <tr>
        <td width="80" align="right">品牌名称</td>
@@ -66,8 +65,8 @@
       <tr>
        <td align="right">是否展示</td>
        <td>
-        <input type="radio" name="brand_status" id="">展示
-        <input type="radio" name="brand_status" id="">不展示
+        <input type="radio" name="brand_status" value="1">展示
+        <input type="radio" name="brand_status" value="0">不展示
        </td>
       </tr>
       <tr>

@@ -1,18 +1,25 @@
 <?php
 
 namespace app\admin\controller;
-
 use think\Controller;
+use think\Db;
 use think\Request;
 
-class Admin extends Controller
+class Admin extends Common
 {
 
     public function show()
     {
        if(request()->isGet()){
-           $data=\app\admin\model\Admin::showAdmin();
-           return view("show",["data"=>$data]);
+           $admin=new \app\admin\model\Admin();
+           $data=$admin->all();
+           foreach($data as $kal=>$val){
+               foreach($val->role as $k=>$v){
+                   dump($v->node);
+               }
+           }
+           exit;
+           return view("show",["admin"=>$data]);
        }
     }
 
@@ -22,28 +29,39 @@ class Admin extends Controller
            $data=\app\admin\model\Role::getRole();
            return view("add_admin",["data"=>$data]);
        }
-       if(request()->isPost()){
-           $data=request()->post();
-           $arr=[
-               "admin_name"=>$data["admin_name"],
-               "admin_pwd"=>$data["admin_pwd"],
-               "admin_email"=>$data["admin_email"],
-               "role_id"=>$data["role_id"],
-           ];
-           //连接模型添加数据
-           $res=\app\admin\model\Admin::addAdmin($arr);
-           if($res){
-               echo json_encode(["status"=>1,"msg"=>"OK"]);
-           }else{
-               echo json_encode(["status"=>0,"msg"=>"数据添加失败"]);
-           }
-       }
+        if(request()->isPost()){
+            $adminModel=new \app\admin\model\Admin();
+            $adminModel->admin_name=request()->post("admin_name");
+            $adminModel->admin_salf=$admin_salf=substr(uniqid(),-4);
+            $adminModel->admin_pwd=md5(md5(request()->post("admin_pwd")).$admin_salf);
+            $adminModel->admin_add_time=time();
+            $adminModel->save();
+            $adminModel->role()->saveAll(request()->post("role_id"));
+            $this->success("添加管理员成功",'admin/show');
+        }
     }
 
-    public function save(Request $request)
+
+    public function delAdmin()
     {
-        //
+        //接值判断删除
+        $id=request()->get("admin_id",0);
+        var_dump($id);
+        if($id==0){
+            $this->error("非法请求");
+        }
+        //连库删除
+//        $admin=new \app\admin\model\Admin();
+//        $admin->get($id);
+//        $admin->delete();
+        $res=\app\admin\model\Admin::destroy($id);
+        if($res){
+            echo json_encode(["status"=>1,"msg"=>"OK"]);
+        }else{
+            echo json_encode(["status"=>0,"msg"=>"数据删除失败"]);
+        }
     }
+
 
     /**
      * 显示指定的资源

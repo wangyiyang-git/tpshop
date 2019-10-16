@@ -88,22 +88,25 @@
     validate.checkPwd=true;
     return true;
    });
+
    //发ajax表单提交
    $("span[name='admin']").click(function(){
        //取值
     var admin_name=$("input[name='admin_name']").val().trim();
     var admin_email=$("input[name='admin_email']").val().trim();
     var admin_pwd=$("input[name='admin_pwd']").val().trim();
-    var role_id=$(".role_id").prop("value");
+    var role_id=$(".role_id:checked").each(function(i){
+        role[i]=$(this).val();
+    });
       //发ajax
     $.ajax({
      url:"{:url('admin/add_admin')}",
-     type:"post",
+     type:"",
      data:{
       admin_name:admin_name,
       admin_email:admin_email,
       admin_pwd:admin_pwd,
-      role_id:role_id
+      role_id:role
      },
      dataType:"json",
      success:function(data){
@@ -112,6 +115,7 @@
       }
      }
     });
+
     //验证
     $("span[name='admin']").click(function(){
      $("input[name='admin_name']").trigger("blur");
@@ -133,7 +137,7 @@
    <!-- 当前位置 -->
 <div id="urHere">DouPHP 管理中心<b>></b><strong>网站管理员</strong> </div>   <div class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
             <h3><a href="{:url('admin/show')}" class="actionBtn">管理员列表</a>管理员列表</h3>
-    <form  name="admin" method="post">
+    <form action="{:url('admin/add_admin')}"  name="admin" method="post">
      <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
       <tr>
        <td width="80" align="right">管理员名称</td>
@@ -162,12 +166,9 @@
       <tr>
        <td align="right">角色分类</td>
        <td>
-        <select >
-         <option value="0">请选择...</option>
-         {foreach $data as $key=>$vo }
-         <option class="role_id" value="{$vo.role_id}">{$vo.role_name}</option>
+         {foreach $data as $key=>$vo}
+         <span><input type="checkbox" class="role_id" name="role_id[]" value="{$vo.role_id}">{$vo.role_name}</span>
          {/foreach}
-        </select>
        </td>
       </tr>
       <tr>
@@ -175,7 +176,7 @@
        <td>
         <!--<input type="hidden" name="token" value="b9439ae8" />-->
         <!--<input type="hidden" name="cat_id" value="" />-->
-        <span name="admin" class="btn" type="button" value="提交" />提交</span>
+        <input name="admin" class="btn" type="submit" value="提交" />
        </td>
       </tr>
      </table>

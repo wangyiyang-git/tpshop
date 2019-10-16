@@ -47,12 +47,27 @@
     <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
       <tr>
         <th width="120" align="left">品牌名称</th>
-        <th align="left">品牌描述</th>
-        <th width="120" align="left">品牌Logo</th>
-          <th width="100" align="left">是否展示</th>
+        <th align="center">品牌描述</th>
+        <th width="120" align="center">品牌Logo</th>
+          <th width="100" align="center">是否展示</th>
        <th width="80" align="center">排序</th>
         <th width="80" align="center">操作</th>
      </tr>
+        {foreach $data as $key=>$vo }
+        <tr>
+        <th width="120" align="left">{$vo.brand_name}</th>
+        <th align="center">{$vo.brand_content}</th>
+        <th width="120"><img src="{$vo.brand_logo}" alt="" width="150" height="60"></th>
+        <th width="100" align="left">
+            {if $vo.brand_order eq 1}显示
+            {else}不显示
+            {/if}
+        </th>
+        <th width="80" align="center">{$vo.brand_order}</th>
+        <th align="center"><a href="">编辑</a> |
+            <a href="javascript:void(0)"  class="del">删除</a></th>
+        </tr>
+        {/foreach}
           </table>
            </div>
  </div>

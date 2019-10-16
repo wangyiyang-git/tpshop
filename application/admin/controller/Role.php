@@ -32,23 +32,12 @@ class Role extends Controller
             return view("add_role",["arr"=>$arr]);
         }
         if(request()->isPost()){
-           //接值判断
-            $role_name=request()->post("role_name");
-            $role_content=request()->post("role_content");
-            $node_id=request()->post("node_id");
-            $node_id=implode(",",$node_id);
-            $data=[
-                "role_name"=>$role_name,
-                "role_content"=>$role_content,
-                "node_id"=>$node_id
-            ];
-            $arr=\app\admin\model\Role::add_role($data);
-            if($arr){
-                $this->success("添加角色成功","role/show");
-            }else{
-                $this->error("添加角色失败");
-            }
-
+            $roleModel=new \app\admin\model\Role();
+            $roleModel->role_name=request()->post("role_name");
+            $roleModel->role_content=request()->post("role_content");
+            $roleModel->save();
+            $roleModel->node()->saveAll(request()->post("node_id"));
+            $this->success("添加角色成功",'role/show');
         }
 
     }

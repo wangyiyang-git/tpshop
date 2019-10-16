@@ -7,6 +7,28 @@
  {load href="/static/admin/css/public.css" /}
  {load href="/static/admin/js/jquery.min.js" /}
  {load href="/static/admin/js/global.js" /}
+  <script>
+      $(function(){
+          $(".del").click(function(){
+              //取值
+              var admin_id=parseInt($(this).attr('admin_id'));
+              $.ajax({
+                  url:"{:url('delAdmin')}",
+                  type:"get",
+                  data:{
+                      admin_id:admin_id
+                  },
+                  //监听
+                  dataType:"json",
+                  success:function(data){
+                      if(data.status==1){
+                          window.location.href = location.href ;
+                      }
+                  }
+              });
+          });
+      });
+  </script>
 </head>
 <body>
 <div id="dcWrap">
@@ -18,25 +40,32 @@
 <div id="urHere">DouPHP 管理中心<b>></b><strong>网站管理员</strong> </div>   <div id="manager" class="mainBox" style="height:auto!important;height:550px;min-height:550px;">
     <h3><a href="{:url('admin/add_admin')}" class="actionBtn">添加管理员</a>网站管理员</h3>
         <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tableBasic">
-     <tr>
-      <th width="30" align="center">编号</th>
-      <th align="left">管理员名称</th>
-      <th align="center">E-mail地址</th>
-      <th align="center">添加时间</th>
-      <th align="center">最后登录时间</th>
-      <th align="center">操作</th>
-     </tr>
-         {foreach $data as $key=>$vo }
-         <tr>
-          <th width="30" align="center">{$vo.admin_id}</th>
-          <th align="left">{$vo.admin_name}</th>
-          <th align="center">{$vo.admin_email}</th>
-          <th align="center">{:date("Y-m-d h-i-s",$vo.admin_first_time)}</th>
-          <th align="center">{:date("Y-m-d h-i-s",$vo.admin_last_time)}</th>
-          <th align="center"><a href="">分配权限</a> |<a href="">编辑</a> |
-           <a href="javascript:void(0)"  class="del">删除</a></th>
-         </tr>
-         {/foreach}
+            <tr>
+                <th width="30" align="center">编号</th>
+                <th align="left">管理员名称</th>
+                <th align="center">拥有角色</th>
+                <th align="center">拥有权限</th>
+                <th align="center">操作</th>
+            </tr>
+            {foreach $admin as $key=>$val}
+            <tr>
+                <td align="center">{$val.admin_id}</td>
+                <td>{$val.admin_name}</td>
+                <td align="left">
+                    {foreach $val["role_id"] as $k=>$v}
+                    {$v->role_name}
+                    {/foreach}
+                </td>
+                <td align="left">
+                    {foreach $val->role as $k=>$v}
+                    {foreach $v->node as $k1=>$v1}
+                    {$v1->node_name},
+                    {/foreach}
+                    {/foreach}
+                </td>
+                <td align="center"><a >编辑</a> | <a >删除</a></td>
+            </tr>
+            {/foreach}
          </table>
                        </div>
  </div>
